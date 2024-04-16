@@ -1,10 +1,9 @@
 {
   "name": "playtowinorm_moniky",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1", 
+    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon index.js"
   },
   "keywords": [],
@@ -17,5 +16,7 @@
     "nodemon": "^3.1.0",
     "pg": "^8.11.3",
     "sequelize": "^6.37.1"
-  }
+  },
+  "devDependencies": {},
+  "description": ""
 }
