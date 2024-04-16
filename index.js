@@ -31,7 +31,7 @@ app.post("/usuarios/novo", async (req, res) => {
     res.send("Usuário inserido sob o id " + usuario.id);
 });
 
-app.listen(8000);
+app.listen(3000);
 
 conn
 .sync()
