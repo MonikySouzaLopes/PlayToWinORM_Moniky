@@ -20,6 +20,7 @@ app.get("/", (req, res)=>{
     res.render("home")
 });
 
+//Buscar os dados no banco//
 app.get("/usuarios", async (req, res)=>{
     const usuarios = await Usuario.findAll({raw: true});
     res.render("usuarios", { usuarios });
@@ -37,6 +38,8 @@ app.post("/usuarios/novo", async (req, res) => {
             nickname,
             nome,
         };
+
+        //Cadastrar usuario//
         const usuario = await Usuario.create(dadosUsuario);
 
         res.send("Usuário inserido sob o id " + usuario.id);
@@ -45,6 +48,18 @@ app.post("/usuarios/novo", async (req, res) => {
         res.status(500).send("Erro ao inserir usuário");
     }
 });
+
+app.get("/usuarios/:id/update", async (req, res) =>{
+    const id = parseInt(req.params.id);
+    const usuario = await Usuario.findByPk(id, {raw: true});
+    res.render("formUsuario", {usuario});
+
+    //const usuario = Usuario.findOne({
+      //  where: {id: id},
+      //  raw: true,
+  //  });
+});
+
 
 app.listen(8000, () => {
     console.log("Servidor está ouvindo na porta 8000");
