@@ -61,7 +61,7 @@ app.get("/usuarios/:id/update", async (req, res) =>{
 });
 
 app.post("/usuarios/:id/update", async(req, res) => {
-    const id = parseInt(rep.params.id);
+    const id = parseInt(req.params.id);
     const dadosUsuario = {
         nickname: req.body.nickname,
         nome: req.body.nome,
