@@ -2,7 +2,8 @@
 require("dotenv").config();
 const conn = require("./db/conn");
 const Usuario = require("./models/Usuario");
-const Jogo = require("./models/Jogo")
+const Jogo = require("./models/Jogo");
+const Cartao = require("./models/Cartao")
 const express = require("express");
 const exphbs = require("express-handlebars");
 
@@ -89,12 +90,38 @@ app.post("/usuarios/:id/delete", async (req, res) =>{
     }
 });
 
+// Rostas de cartão 
+
+//buscar dados do cartão
+app.get("/usuarios/:id/cartoes", async (req, res) =>{
+    const id = parseInt(req.params.id);
+    const usuario = await Usuario.findByPk(id, {raw: true});
+
+    const cartoes = await Cartao.findAll({
+        raw: true, 
+        where: {UsuarioId: id},
+    });
+
+    res.render("cartoes.handlebars", {usuario, cartoes});
+});
+
+//Formulário de cartões 
+app.get("/usuarios/:id/novoCartao", async (req, res) =>{
+    const id = parseInt(req.params.id);
+    const usuario = await Usuario.findByPk(id, { raw: true});
+
+    res.render("formCartao", {usuario})
+})
+
+
+
 // Buscar dados dos jogos no banco//
 app.get("/jogos", async (req, res)=>{
     const jogos = await Jogo.findAll({raw: true});
     res.render("jogos", { jogos });
 });
 
+//Formulário de jogo
 app.get("/jogos/novo", (req, res) => {
     res.render("formJogo");
 });
