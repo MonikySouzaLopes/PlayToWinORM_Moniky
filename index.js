@@ -3,7 +3,8 @@ require("dotenv").config();
 const conn = require("./db/conn");
 const Usuario = require("./models/Usuario");
 const Jogo = require("./models/Jogo");
-const Cartao = require("./models/Cartao")
+const Cartao = require("./models/Cartao");
+const Conquista = require("./models/Conquista");
 const express = require("express");
 const exphbs = require("express-handlebars");
 
@@ -113,7 +114,21 @@ app.get("/usuarios/:id/novoCartao", async (req, res) =>{
     res.render("formCartao", {usuario})
 })
 
+//Cadastro de cartão
+app.post("/usuarios/:id/novoCartao", async (req, res) =>{
+    const id = parseInt(req.params.id);
 
+    const dadosCartao ={
+        numero: req.body.numero,
+        nome: req.body.nome,
+        codSeguranca: req.body.codSeguranca,
+        UsuarioId: id,
+    };
+
+    await Cartao.create(dadosCartao);
+
+    res.redirect(`/usuarios/${id}/cartoes`);
+});
 
 // Buscar dados dos jogos no banco//
 app.get("/jogos", async (req, res)=>{
@@ -180,6 +195,46 @@ app.post("/jogos/:id/delete", async (req, res) =>{
         res.send("Erro ao deletar o jogo")
     }
 });
+
+// Rostas de conquista 
+
+//buscar dados da conquista
+app.get("/jogos/:id/conquistas", async (req, res) =>{
+    const id = parseInt(req.params.id);
+    const jogo = await Jogo.findByPk(id, {raw: true});
+
+    const conquistas = await Conquista.findAll({
+        raw: true, 
+        where: {JogoId: id},
+    });
+
+    res.render("conquistas.handlebars", {jogo, conquistas});
+});
+
+//Formulário de conquistas 
+app.get("/jogos/:id/novaConquista", async (req, res) =>{
+    const id = parseInt(req.params.id);
+    const jogo = await Jogo.findByPk(id, { raw: true});
+
+    res.render("formConquista", {jogo})
+})
+
+//Cadastro de conquista
+app.post("/jogos/:id/novaConquista", async (req, res) =>{
+    const id = parseInt(req.params.id);
+
+    const dadosConquista ={
+        titulo: req.body.titulo,
+        descricao: req.body.descricao,
+        JogoId: id,
+    };
+
+    await Conquista.create(dadosConquista);
+
+    res.redirect(`/jogos/${id}/conquistas`);
+});
+
+
 
 app.listen(8000, () => {
     console.log("Servidor está ouvindo na porta 8000");

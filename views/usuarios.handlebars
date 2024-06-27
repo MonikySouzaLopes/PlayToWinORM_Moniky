@@ -8,6 +8,7 @@
         <th>Nickname</th>
         <th>Nome</th>
     </tr>
+    {{#each usuarios}}
         <tr>
             <td>{{this.id}}</td>
             <td>{{this.nickname}}</td>
@@ -20,4 +21,5 @@
                 <a href="/usuarios/{{this.id}}/cartoes">Ver Cartões</a>
             </td>
         </tr>
+        {{/each}}
 </table>
